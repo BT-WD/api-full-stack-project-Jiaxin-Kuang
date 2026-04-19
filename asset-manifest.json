@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/api-full-stack-project-Jiaxin-Kuang/static/css/main.f855e6bc.css",
-    "main.js": "/api-full-stack-project-Jiaxin-Kuang/static/js/main.5c66d52a.js",
+    "main.js": "/api-full-stack-project-Jiaxin-Kuang/static/js/main.4cefff01.js",
     "static/js/453.d9a22625.chunk.js": "/api-full-stack-project-Jiaxin-Kuang/static/js/453.d9a22625.chunk.js",
     "index.html": "/api-full-stack-project-Jiaxin-Kuang/index.html",
     "main.f855e6bc.css.map": "/api-full-stack-project-Jiaxin-Kuang/static/css/main.f855e6bc.css.map",
-    "main.5c66d52a.js.map": "/api-full-stack-project-Jiaxin-Kuang/static/js/main.5c66d52a.js.map",
+    "main.4cefff01.js.map": "/api-full-stack-project-Jiaxin-Kuang/static/js/main.4cefff01.js.map",
     "453.d9a22625.chunk.js.map": "/api-full-stack-project-Jiaxin-Kuang/static/js/453.d9a22625.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.5c66d52a.js"
+    "static/js/main.4cefff01.js"
   ]
 }
