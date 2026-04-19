@@ -1,6 +1,20 @@
 import { useEffect, useState, useRef } from "react";
+import { initializeApp } from "firebase/app";
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import "../css/App.css";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyD7LJYn6jkV0XSpCO5gIJRDdUoPoHOKPpk",
+    authDomain: "food-match-4be2d.firebaseapp.com",
+    projectId: "food-match-4be2d",
+    storageBucket: "food-match-4be2d.firebasestorage.app",
+    messagingSenderId: "754437707554",
+    appId: "1:754437707554:web:b50fc48c002bfcde78377b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const App = () => {
     const [category, setCategory] = useState("");
@@ -120,10 +134,29 @@ const App = () => {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [offset, loadingRef.current, hasMore]);
 
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = `${window.location.origin}/api-full-stack-project-Jiaxin-Kuang/#/login`;
+            }   
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    function authSignOut() { 
+        signOut(auth).then(() => {
+            window.location.href = `${window.location.origin}/api-full-stack-project-Jiaxin-Kuang/#/login`;
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
     return (
         <div className="App">
             <h1>Food Match</h1>
             <p>Find your perfect meal match!</p>
+            <button onClick={authSignOut}>Sign Out</button>
 
             <select value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">Any</option>
