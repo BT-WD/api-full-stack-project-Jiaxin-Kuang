@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, setDoc, arrayUnion, doc, getDoc } from "firebase/firestore";
 import axios from "axios";
 import "../css/App.css";
 
@@ -15,6 +16,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 const App = () => {
     const [category, setCategory] = useState("");
@@ -24,11 +26,14 @@ const App = () => {
     const [term, setTerm] = useState("");
     const [openNow, setOpenNow] = useState(false);
 
+    const [currentRestaurant, setCurrentRestaurant] = useState(null);
     const [restaurants, setRestaurants] = useState([]);
+    const [likedRestaurants, setLikedRestaurants] = useState([]);
 
     const [offset, setOffset] = useState(0);
     const loadingRef = useRef(false);
     const [hasMore, setHasMore] = useState(true);
+    const [user, setUser] = useState(null);
 
     async function getYelpRestaurants() {
         try {
@@ -43,7 +48,6 @@ const App = () => {
                 },
             });
 
-            console.log("Restaurants:", res.data);
             return res.data.businesses || [];
         } 
         catch (error) {
@@ -98,47 +102,97 @@ const App = () => {
         loadingRef.current = false;
     };
 
-    const displayRestaurant = async (restaurant) => {
-        const resultsDiv = document.getElementById("results");
-
+    const displayRestaurant = (restaurant) => {
         if (!restaurant) return;
-
-        resultsDiv.innerHTML = `
-            <b>${restaurant.name}</b><br/>
-            <img src="${restaurant.image_url}" alt="${restaurant.name}" width="200"/><br/>
-            Rating: ${restaurant.rating}<br/>
-            Address: ${restaurant.location.address1}, ${restaurant.location.city}<br/>
-            Menu: ${restaurant.attributes.menu_url}<br/>
-            Reviews: ${restaurant.url}<br/>
-            Providing: ${restaurant.transactions}<br/>
-        `;
+        setCurrentRestaurant(restaurant);
     };
+    
+    async function loadLikedRestaurants() {
+        try {
+            const docRef = doc(db, "userlikes", user.uid);
+            const docSnap = await getDoc(docRef);
 
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (loadingRef.current) return;
-            if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-
-            setRestaurants((prev) => {
-            if (prev.length > 1) {
-                const updated = prev.slice(1);
-                displayRestaurant(updated[0]);
-                return updated;
+            if (docSnap.exists()) {
+                setLikedRestaurants(docSnap.data().likes || []);
+            } 
+            else {
+                setLikedRestaurants([]);
             }
-            loadNextPage();
-            return [];
+        } 
+        catch (e) {
+            console.error("Error fetching liked restaurants: ", e);
+        }
+    }
+
+    const goNext = () => {
+        if (loadingRef.current) return;
+
+        setRestaurants((prev) => {
+            if (prev.length <= 1) {
+                loadNextPage();
+                return [];
+            }
+
+            const updated = prev.slice(1);
+            setCurrentRestaurant(updated[0]);
+            return updated;
         });
     };
 
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [offset, loadingRef.current, hasMore]);
+    async function addRestaurant(restaurant) {
+        try {
+            await setDoc(
+                doc(db, "userlikes", user.uid),
+                {
+                    likes: arrayUnion(restaurant)
+                },
+                { merge: true }
+            );
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    }
+
+    const handleLike = async () => {
+        const current = restaurants[0];
+        if (!current || !user) return;
+
+        await addRestaurant(current);   
+        goNext();                       
+        await loadLikedRestaurants();   
+    };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const handleKeyDown = async (e) => {
+            if (loadingRef.current || !restaurants.length) return;
+
+            if (e.key === "ArrowRight") {
+                await handleLike();
+            }
+
+            if (e.key === "ArrowLeft") {
+                goNext();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [restaurants, user]);
+    
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            setUser(user);
+
             if (!user) {
                 window.location.href = `${window.location.origin}/api-full-stack-project-Jiaxin-Kuang/#/login`;
-            }   
+                return;
+            }
+
+            const ref = doc(db, "userlikes", user.uid);
+            const snap = await getDoc(ref);
+
+            const likes = snap.exists() ? snap.data().likes || [] : [];
+            setLikedRestaurants(likes);
         });
 
         return () => unsubscribe();
@@ -214,7 +268,37 @@ const App = () => {
 
             <button onClick={handleFetch}>Search Restaurants</button>
 
-            <div id="results"></div>
+            <div id="results">
+                {currentRestaurant && (
+                    <>
+                        <b>{currentRestaurant.name}</b><br/>
+                        <img src={currentRestaurant.image_url} width="200"/><br/>
+                        Rating: {currentRestaurant.rating}<br/>
+                        Address: {currentRestaurant.location.address1}, {currentRestaurant.location.city}<br/>
+                        Reviews: {currentRestaurant.url}<br/>
+                    </>
+                )}
+            </div>
+            <button onClick={goNext}>Dislike</button>
+            <button onClick={handleLike}>Like</button>
+
+            <div id="likedRestaurants">
+                <h2>Liked Restaurants</h2>
+
+                {likedRestaurants.length === 0 ? (
+                    <p>No liked restaurants yet!</p>
+                ) : (
+                    likedRestaurants.map((r, i) => (
+                        <div key={i}>
+                            <b>{r.name}</b><br />
+                            <img src={r.image_url} width="100" /><br />
+                            Rating: {r.rating}<br />
+                            Address: {r.location?.address1}, {r.location?.city}
+                            <br/><br/>
+                        </div>
+                    ))
+                )}
+            </div>
         </div>
     );
 };
