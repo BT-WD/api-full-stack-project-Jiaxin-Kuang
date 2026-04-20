@@ -2,6 +2,8 @@ import "../css/Login.css";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
 import { useState } from "react"; 
+import stripes from "../assets/stripes.svg";
+import login from "../assets/login.svg";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD7LJYn6jkV0XSpCO5gIJRDdUoPoHOKPpk",
@@ -66,30 +68,41 @@ const Login = () => {
     });
 
     return (
-        <div className="login-container">
-            <h2>Login/Sign Up</h2>
-            <button onClick={() => {setSignIn(prev => !prev)}}>Switch to {signIn ? "Sign Up" : "Login"}</button>
-            <form className="login-form">
-                <button onClick={() => signInLinked(googleProvider)}> Google </button>
-                <button onClick={() => signInLinked(githubProvider)}> GitHub </button>
-                <input 
-                    type="text" 
-                    placeholder="Username" 
-                    required 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input 
-                    type="password" 
-                    placeholder="Password" 
-                    required 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type="submit" onClick={() => signIn ? signInEmail(auth, email, password) : createUserEmail(auth, email, password)}>
-                    Login or Sign Up
-                </button>
-            </form>
+        <div id="loginContainer">
+            <img
+                id="banner"
+                src="./banner.svg"
+                alt="Login Banner"
+            />
+            <div id="loginBox">
+                <div className="stripes top" style={{ backgroundImage: `url(${stripes})` }}></div>
+                <form id="loginForm">
+                    <img id="logo" src={login} alt="Logo"/>
+                    <button onClick={() => {setSignIn(prev => !prev)}}>Switch to {signIn ? "Sign Up" : "Login"}</button>
+                    <input 
+                        type="text" 
+                        placeholder="Username" 
+                        required 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input 
+                        type="password" 
+                        placeholder="Password" 
+                        required 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <div id="providers">
+                        <button type="button" onClick={() => signInLinked(googleProvider)}>Sign in with Google</button>
+                        <button type="button" onClick={() => signInLinked(githubProvider)}>Sign in with GitHub</button>
+                    </div>
+                    <button type="submit" onClick={() => signIn ? signInEmail(auth, email, password) : createUserEmail(auth, email, password)}>
+                        Login or Sign Up
+                    </button>
+                </form>
+                <div className="stripes bottom" style={{ backgroundImage: `url(${stripes})` }}></div>
+            </div>
         </div>
     );
 }
