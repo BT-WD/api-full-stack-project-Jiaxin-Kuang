@@ -4,6 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 import { useState } from "react"; 
 import stripes from "../assets/stripes.svg";
 import login from "../assets/login.svg";
+import banner from "../assets/banner.svg";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD7LJYn6jkV0XSpCO5gIJRDdUoPoHOKPpk",
@@ -71,7 +72,7 @@ const Login = () => {
         <div id="loginContainer">
             <img
                 id="banner"
-                src="./banner.svg"
+                src={banner}
                 alt="Login Banner"
             />
             <div id="loginBox">

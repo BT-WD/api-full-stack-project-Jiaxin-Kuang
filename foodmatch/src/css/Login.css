@@ -4,8 +4,8 @@
 }
 
 #banner {
-  height: 100%;
-  width: auto;              
+  height: auto;
+  width: 50%;              
   object-fit: cover;
   flex-shrink: 0;           
 }
@@ -31,14 +31,41 @@
   gap: 2vh;
 }
 
-#loginBox input {
-  background-color: #f6f6e9;
-  height: 5vh;
-  width: 80%;
+#loginBox input,
+#loginBox button, 
+#providers button {
+  padding: 2vh;
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
   border-radius: 10px;
   opacity: 0.75;
-  padding: 10px;
-  font-size: 1.2em;
+  box-sizing: border-box; 
+  border: none;  
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+}
+
+#loginBox input {
+  background-color: #f6f6e9;
+  width: 80%;
+}
+
+#loginBox button {
+  width: 80%;
+  background-color: #ff862f;
+  color: #ffffff;
+  appearance: none;         
+  -webkit-appearance: none;
+}
+
+#providers {
+  display: flex;
+  justify-content: center;
+  gap: 2%;
+  width: 100%;
+}
+
+#providers button {
+  width: 39%;
+  background-color: #33271e
 }
 
 .stripes {
@@ -59,7 +86,7 @@
   bottom: 0;
 }
 
-@media (max-width: 600px) {
+@media ((max-width: 600px) or (max-aspect-ratio: 4/3)) {
   #banner {
     display: none;
   }
@@ -67,5 +94,11 @@
   #login {
     flex: 1;
     width: 100%;
+  }
+}
+
+@media (max-height: 600px) {
+  .stripes {
+    display: none;
   }
 }

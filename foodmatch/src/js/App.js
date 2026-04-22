@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { initializeApp } from "firebase/app";
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, setDoc, arrayUnion, doc, getDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, setDoc, arrayUnion, doc } from "firebase/firestore";
 import axios from "axios";
 import "../css/App.css";
+import Heading from "../components/header/Heading";
+import Display from "../components/display/Display";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD7LJYn6jkV0XSpCO5gIJRDdUoPoHOKPpk",
@@ -28,7 +30,6 @@ const App = () => {
 
     const [currentRestaurant, setCurrentRestaurant] = useState(null);
     const [restaurants, setRestaurants] = useState([]);
-    const [likedRestaurants, setLikedRestaurants] = useState([]);
 
     const [offset, setOffset] = useState(0);
     const loadingRef = useRef(false);
@@ -67,7 +68,7 @@ const App = () => {
 
         if (data.length > 0) {
             setRestaurants(data);
-            displayRestaurant(data[0]);
+            setCurrentRestaurant(data[0]);
         } 
         else {
             setRestaurants([]);
@@ -89,7 +90,7 @@ const App = () => {
         if (data.length > 0) {
         setOffset(nextOffset);
             setRestaurants(data);
-            displayRestaurant(data[0]);
+            setCurrentRestaurant(data[0]);
 
             if (data.length < 50) {
                 setHasMore(false);
@@ -102,28 +103,6 @@ const App = () => {
         loadingRef.current = false;
     };
 
-    const displayRestaurant = (restaurant) => {
-        if (!restaurant) return;
-        setCurrentRestaurant(restaurant);
-    };
-    
-    async function loadLikedRestaurants() {
-        try {
-            const docRef = doc(db, "userlikes", user.uid);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                setLikedRestaurants(docSnap.data().likes || []);
-            } 
-            else {
-                setLikedRestaurants([]);
-            }
-        } 
-        catch (e) {
-            console.error("Error fetching liked restaurants: ", e);
-        }
-    }
-
     const goNext = () => {
         if (loadingRef.current) return;
 
@@ -135,6 +114,7 @@ const App = () => {
 
             const updated = prev.slice(1);
             setCurrentRestaurant(updated[0]);
+            console.log("Go to next restaurant:", updated[0]?.name);
             return updated;
         });
     };
@@ -159,7 +139,6 @@ const App = () => {
 
         await addRestaurant(current);   
         goNext();                       
-        await loadLikedRestaurants();   
     };
 
     useEffect(() => {
@@ -187,31 +166,14 @@ const App = () => {
                 window.location.href = `${window.location.origin}/api-full-stack-project-Jiaxin-Kuang/#/login`;
                 return;
             }
-
-            const ref = doc(db, "userlikes", user.uid);
-            const snap = await getDoc(ref);
-
-            const likes = snap.exists() ? snap.data().likes || [] : [];
-            setLikedRestaurants(likes);
         });
 
         return () => unsubscribe();
     }, []);
 
-    function authSignOut() { 
-        signOut(auth).then(() => {
-            window.location.href = `${window.location.origin}/api-full-stack-project-Jiaxin-Kuang/#/login`;
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-
     return (
-        <div className="App">
-            <h1>Food Match</h1>
-            <p>Find your perfect meal match!</p>
-            <button onClick={authSignOut}>Sign Out</button>
-
+        <div id="App">
+            <Heading></Heading>
             <select value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">Any</option>
                 <option value="asianfusion">Asian Fusion</option>
@@ -267,38 +229,11 @@ const App = () => {
             />
 
             <button onClick={handleFetch}>Search Restaurants</button>
-
-            <div id="results">
-                {currentRestaurant && (
-                    <>
-                        <b>{currentRestaurant.name}</b><br/>
-                        <img src={currentRestaurant.image_url} width="200"/><br/>
-                        Rating: {currentRestaurant.rating}<br/>
-                        Address: {currentRestaurant.location.address1}, {currentRestaurant.location.city}<br/>
-                        Reviews: {currentRestaurant.url}<br/>
-                    </>
-                )}
-            </div>
-            <button onClick={goNext}>Dislike</button>
-            <button onClick={handleLike}>Like</button>
-
-            <div id="likedRestaurants">
-                <h2>Liked Restaurants</h2>
-
-                {likedRestaurants.length === 0 ? (
-                    <p>No liked restaurants yet!</p>
-                ) : (
-                    likedRestaurants.map((r, i) => (
-                        <div key={i}>
-                            <b>{r.name}</b><br />
-                            <img src={r.image_url} width="100" /><br />
-                            Rating: {r.rating}<br />
-                            Address: {r.location?.address1}, {r.location?.city}
-                            <br/><br/>
-                        </div>
-                    ))
-                )}
-            </div>
+            <Display 
+                currentRestaurant={currentRestaurant} 
+                dislikeButton={<button onClick={goNext}>Dislike</button>}
+                likeButton={<button onClick={handleLike}>Like</button>} 
+            />
         </div>
     );
 };
