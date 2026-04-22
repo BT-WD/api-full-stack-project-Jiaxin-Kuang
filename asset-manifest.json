@@ -1,17 +1,19 @@
 {
   "files": {
-    "main.css": "/api-full-stack-project-Jiaxin-Kuang/static/css/main.a27ae836.css",
-    "main.js": "/api-full-stack-project-Jiaxin-Kuang/static/js/main.a68e8b41.js",
+    "main.css": "/api-full-stack-project-Jiaxin-Kuang/static/css/main.311e5a77.css",
+    "main.js": "/api-full-stack-project-Jiaxin-Kuang/static/js/main.d51f6815.js",
     "static/js/453.d9a22625.chunk.js": "/api-full-stack-project-Jiaxin-Kuang/static/js/453.d9a22625.chunk.js",
+    "static/media/banner.svg": "/api-full-stack-project-Jiaxin-Kuang/static/media/banner.1d39d056b9f0c05a233ae5bd13ff8c20.svg",
     "static/media/stripes.svg": "/api-full-stack-project-Jiaxin-Kuang/static/media/stripes.3822567138c5664db5d1c3337f59f34c.svg",
     "static/media/login.svg": "/api-full-stack-project-Jiaxin-Kuang/static/media/login.fd6b210e8eac6c51d4a9a36706accc1d.svg",
+    "static/media/logo.svg": "/api-full-stack-project-Jiaxin-Kuang/static/media/logo.e55c429c3db4c63cef8a9c71dea83cab.svg",
     "index.html": "/api-full-stack-project-Jiaxin-Kuang/index.html",
-    "main.a27ae836.css.map": "/api-full-stack-project-Jiaxin-Kuang/static/css/main.a27ae836.css.map",
-    "main.a68e8b41.js.map": "/api-full-stack-project-Jiaxin-Kuang/static/js/main.a68e8b41.js.map",
+    "main.311e5a77.css.map": "/api-full-stack-project-Jiaxin-Kuang/static/css/main.311e5a77.css.map",
+    "main.d51f6815.js.map": "/api-full-stack-project-Jiaxin-Kuang/static/js/main.d51f6815.js.map",
     "453.d9a22625.chunk.js.map": "/api-full-stack-project-Jiaxin-Kuang/static/js/453.d9a22625.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a27ae836.css",
-    "static/js/main.a68e8b41.js"
+    "static/css/main.311e5a77.css",
+    "static/js/main.d51f6815.js"
   ]
 }
