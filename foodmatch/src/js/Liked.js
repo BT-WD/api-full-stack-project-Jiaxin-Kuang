@@ -63,30 +63,40 @@ const Liked = () => {
     }, [user]);
 
     return (
-        <div className="likedContainer">
-            <Heading></Heading>
-            <div id="likedRestaurants">
-                <h2>Liked Restaurants</h2>
+        <div className="likedPage">
+            <Heading />
+            <div id="orangeLine"></div>
 
-                {likedRestaurants.length === 0 ? (
+            <div className="likedMain">
+                <div id="likedRestaurants">
+                    {likedRestaurants.length === 0 ? (
                     <p>No liked restaurants yet!</p>
-                ) : (
+                    ) : (
                     likedRestaurants.map((r, i) => (
-                        <div className="oneRestaurant" key={i} onClick={() => setClickedRestaurant(r)}>
-                            <b>{r.name}</b><br />
-                            <img src={r.image_url} width="100" /><br />
-                            Rating: {r.rating}<br />
-                            Address: {r.location?.address1}, {r.location?.city}
-                            <br/><br/>
+                        <div
+                        className="oneRestaurant"
+                        key={i}
+                        onClick={() => setClickedRestaurant(r)}
+                        >
+                        <img src={r.image_url} className="likedImg" />
+
+                        <div className="likedInfo">
+                            <b>{r.name}</b>
+                            <p>{r.rating} ⭐</p>
+                            <p>{r.location?.address1}, {r.location?.city}</p>
+                        </div>
                         </div>
                     ))
-                )}
+                    )}
+                </div>
+
+                <Display
+                    currentRestaurant={clickedRestaurant}
+                    likeButton={null}
+                    dislikeButton={null}
+                />
+
             </div>
-            <Display
-                currentRestaurant={clickedRestaurant} 
-                likeButton={null} 
-                dislikeButton={null}
-            />
         </div>
     )
 }

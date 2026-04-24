@@ -1,5 +1,5 @@
 import "./Heading.css";
-import logo from "../../assets/logo.svg";
+import logoname from "../../assets/logoname.svg";
 import { initializeApp } from "firebase/app";
 import { getAuth, signOut } from "firebase/auth";
 
@@ -26,15 +26,16 @@ const Heading = () => {
 
     return (
         <div id="headingContainer">
-                <div id="logo">
-                    <img src={logo} alt="Food Match Logo" />
-                    <h1>Food Match</h1>
+            <div>
+                <div id="logoname">
+                    <img src={logoname}/>
                 </div>
                 <nav>
                     <a href="#/app">Search</a>
                     <a href="#/liked">Liked Restaurants</a>
                 </nav>
                 <button onClick={authSignOut}>Sign Out</button>
+            </div>
         </div>
     );
 }

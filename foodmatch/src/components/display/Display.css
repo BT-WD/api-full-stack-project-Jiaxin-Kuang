@@ -1,0 +1,120 @@
+#results {
+	background-color: #ffffff;
+	opacity: 0.75;
+	border-radius: 10px;
+	padding: 5vh 2vw;
+	box-sizing: border-box;
+	min-height: 0;
+	height: 100%;
+}
+
+#topSection {
+	display: flex;
+	gap: 2vw;
+	align-items: stretch;
+}
+
+#restaurantImg {
+	width: 40%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	border-radius: 10px;
+	flex-shrink: 0;
+}
+
+#basicInfo {
+	display: flex;
+  flex: 1;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: max(0.9rem, 1vh);
+}
+
+#basicInfo h1 {
+  margin: 0;
+  font-size: max(1.8rem, 4vh);
+  line-height: 3;
+}
+
+#basicInfo p,
+#hours, 
+#bottomSection p {
+	margin: 0;
+	font-size: max(1.2rem, 2,4vh);
+	line-height: 1.5;
+}
+
+#bottomSection {
+  margin-top: max(1.8rem, 2vh);
+  display: flex;
+  flex-direction: column;
+  gap: max(0.9rem, 1vh)
+}
+
+#bottomSection a {
+	color: #ff862f;
+	text-decoration: none;
+}
+
+#bottomSection a:hover {
+  color: #ff944e;
+	text-decoration: underline;
+}
+
+#buttons {
+	margin-top: max(1.8rem, 2vh);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 12px;
+}
+
+.buttonWrapper {
+	flex: 1;
+	display: flex;
+}
+
+#buttons button {
+	background-color: #ff862f;
+	color: #ffffff;
+	padding: 1vh 2.5vw;
+	border-radius: 10px;
+	border: none;
+	font-size: max(0.9rem, 2.25vh);
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+#buttons button:hover {
+	background-color: #ff944e;
+}
+
+.dislikeButton {
+	justify-content: flex-start;
+}
+
+.likeButton {
+	justify-content: flex-end;
+}
+
+@media ((max-width: 600px) or (max-aspect-ratio: 4/3)) {
+	#results {
+		padding: 2rem 1.5rem;
+	}
+
+	#topSection, #bottomSection {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	#restaurantImg {
+		width: 100%;
+		aspect-ratio: 1 / 1;
+	}
+
+	#basicInfo {
+		width: 100%;
+		align-items: center;
+	}
+}

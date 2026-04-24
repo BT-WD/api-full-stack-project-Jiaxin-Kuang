@@ -1,0 +1,128 @@
+#landingPage {
+  background-color: #ff862f;
+  min-height: 100vh;
+}
+
+#topHeading {
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 max(2rem, 3vw);
+}
+
+#landingStripes {
+  width: 100%;
+  height: 5vh;
+  object-fit: cover;
+  background-repeat: repeat-x;
+}
+
+#topHeading img {
+  height: 70%;
+  object-fit: contain;
+}
+
+#topHeading button {
+  background-color: #fbffa5;
+  padding: 1.5vh 1.5vw;
+  border-radius: 10px;
+  border: none;
+  font-size: max(.9rem, 2.2vh);
+  cursor: pointer;
+}
+
+#hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 max(2rem, 3vw);
+  min-height: 85vh;
+}
+
+#heroText {
+  margin-top: max(5rem, 15vh);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 40%;
+}
+
+#heroText h1 {
+  color: #33271e;
+  font-size: max(3rem, 9vh);
+  margin: 0;
+}
+
+#heroText p {
+  color: #33271e;
+  font-size: max(1rem, 3vh);
+  margin: 1rem 0;
+}
+
+#heroImage {
+  position: relative;
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 85vh; 
+}
+
+#heroImage img {
+  width: 80%;
+  height: auto; 
+  display: block;
+}
+
+#textOverlay {
+  position: absolute;
+  top: 50%;
+  right: 0; 
+  transform: translateY(-50%);
+  background: #fbffa5;
+  opacity: 0.85;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  padding: max(1rem, 1vh) max(2rem, 2vw);
+  border-radius: 10px;
+  width: 60%;
+  z-index: 2;
+}
+
+#textOverlay p {
+  font-size: max(2rem, 3vh);
+  margin: 1rem;   
+}
+
+@media (max-width: 600px), (max-aspect-ratio: 4/3) {
+
+  #hero {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    gap: 1.5rem;
+
+    padding-top: 1rem;
+    min-height: auto;
+  }
+
+  #heroText {
+    width: 100%;
+    margin-top: 0; 
+    align-items: center;
+  }
+
+  #heroText h1 {
+    font-size: max(2.5rem, 6vh);
+  }
+
+  #heroText p {
+    font-size: max(1rem, 2.5vh);
+  }
+
+  #textOverlay, #heroImage {
+    display: none;
+  }
+}

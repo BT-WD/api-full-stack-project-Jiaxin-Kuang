@@ -1,5 +1,87 @@
-#header, #logo {
+#headingContainer {
   display: flex;
   justify-content: center;
   width: 100%;
+  padding: 2vh 0;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+  height: max(3rem, 10vh); 
+}
+
+#headingContainer > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 92%;
+  background-color: #ffd230;
+  border-radius: 20px;
+  padding: 1vh 2vw;
+}
+
+#logoname {
+  display: none;
+}
+
+nav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1vh 1.5vw;
+  border-radius: 10px;
+  font-size: max(.9rem, 2.25vh);
+  text-decoration: none;
+  color: black;
+  height: 4vh;
+}
+
+nav a:hover {
+  background-color: #ffffff;
+  opacity: 0.75;
+}
+
+#headingContainer button {
+  background-color: #ff862f;
+  color: #ffffff; 
+  padding: 1vh 2.5vw;
+  border-radius: 10px;
+  border: none;
+  margin-left: 1vh;
+  font-size: max(.9rem, 2.25vh);
+  cursor: pointer;
+}
+
+#headingContainer button:hover {
+  background-color: #ff944e;
+}
+
+@media ((min-width: 600px) or (min-aspect-ratio: 4/3)) {
+  #headingContainer > div {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+  }
+
+  #logoname {
+    display: flex;
+    align-items: center;
+  }
+
+  #logoname img {
+    height: max(40px, 5vh);
+  }
+
+  nav {
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  #headingContainer button {
+    margin-left: 0;
+  }
 }

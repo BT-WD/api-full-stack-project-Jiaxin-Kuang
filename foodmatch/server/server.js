@@ -27,7 +27,7 @@ app.get("/api/restaurants", async (req, res) => {
                     radius,
                     offset,
                     open_now,
-                    limit: 50
+                    limit: 50,
                 }
             }
         );

@@ -25,7 +25,6 @@ const App = () => {
     const [price, setPrice] = useState("2");
     const [radius, setRadius] = useState("5000");
     const [location, setLocation] = useState("");
-    const [term, setTerm] = useState("");
     const [openNow, setOpenNow] = useState(false);
 
     const [currentRestaurant, setCurrentRestaurant] = useState(null);
@@ -35,8 +34,9 @@ const App = () => {
     const loadingRef = useRef(false);
     const [hasMore, setHasMore] = useState(true);
     const [user, setUser] = useState(null);
+    const [error, setError] = useState("");
 
-    async function getYelpRestaurants() {
+    async function getYelpRestaurants(customOffset) {
         try {
             const res = await axios.get("https://api-full-stack-project-jiaxin-kuang.onrender.com/api/restaurants", {
                 params: {
@@ -44,7 +44,7 @@ const App = () => {
                     category: category,
                     price: price,
                     radius: radius,
-                    offset: offset,
+                    offset: customOffset,
                     open_now: openNow,
                 },
             });
@@ -69,11 +69,12 @@ const App = () => {
         if (data.length > 0) {
             setRestaurants(data);
             setCurrentRestaurant(data[0]);
+            setError("");
         } 
         else {
             setRestaurants([]);
             setHasMore(false);
-            document.getElementById("results").innerHTML = "No restaurants found!";
+            setError("No Restaurants Found!");
         }
 
         loadingRef.current = false;
@@ -114,9 +115,10 @@ const App = () => {
 
             const updated = prev.slice(1);
             setCurrentRestaurant(updated[0]);
-            console.log("Go to next restaurant:", updated[0]?.name);
             return updated;
         });
+
+        console.log(currentRestaurant);
     };
 
     async function addRestaurant(restaurant) {
@@ -173,67 +175,85 @@ const App = () => {
 
     return (
         <div id="App">
-            <Heading></Heading>
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="">Any</option>
-                <option value="asianfusion">Asian Fusion</option>
-                <option value="chinese">Chinese</option>
-                <option value="cuban">Cuban</option>
-                <option value="french">French</option>
-                <option value="greek">Greek</option>
-                <option value="indian">Indian</option>
-                <option value="italian">Italian</option>
-                <option value="japanese">Japanese</option>
-                <option value="korean">Korean</option>
-                <option value="latin">Latin American</option>
-                <option value="mediterranean">Mediterranean</option>
-                <option value="mexican">Mexican</option>
-                <option value="spanish">Spanish</option>
-                <option value="thai">Thai</option>
-                <option value="tex-mex">Tex-Mex</option>
-                <option value="vietnamese">Vietnamese</option>
-            </select>
+            <Heading id="heading"></Heading>
+            <div id="orangeLine"></div>
+            <div id="mainApp">
+                <Display id="display"
+                    currentRestaurant={currentRestaurant} 
+                    dislikeButton={<button onClick={goNext}>Dislike</button>}
+                    likeButton={<button onClick={handleLike}>Like</button>} 
+                    error={error}
+                />
+                <div id="search">
+                    <h1> Search Filters </h1>
 
-            <select value={price} onChange={(e) => setPrice(e.target.value)}>
-                <option value="1">$</option>
-                <option value="2">$$</option>
-                <option value="3">$$$</option>
-                <option value="4">$$$$</option>
-            </select>
+                    <div className="searchOption row">
+                        <p>Location</p>
+                        <input
+                            type="text"
+                            placeholder="General/Specific (Required)"
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
+                        />
+                    </div>
 
-            <select value={radius} onChange={(e) => setRadius(e.target.value)}>
-                <option value="1000">1 km</option>
-                <option value="5000">5 km</option>
-                <option value="10000">10 km</option>
-                <option value="20000">20 km</option>
-            </select>
+                    <div className="searchOption">
+                        <p>Cuisine</p>
+                        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                            <option value="">Any</option>
+                            <option value="asianfusion">Asian Fusion</option>
+                            <option value="chinese">Chinese</option>
+                            <option value="cuban">Cuban</option>
+                            <option value="french">French</option>
+                            <option value="greek">Greek</option>
+                            <option value="indian">Indian</option>
+                            <option value="italian">Italian</option>
+                            <option value="japanese">Japanese</option>
+                            <option value="korean">Korean</option>
+                            <option value="latin">Latin American</option>
+                            <option value="mediterranean">Mediterranean</option>
+                            <option value="mexican">Mexican</option>
+                            <option value="spanish">Spanish</option>
+                            <option value="thai">Thai</option>
+                            <option value="tex-mex">Tex-Mex</option>
+                            <option value="vietnamese">Vietnamese</option>
+                        </select>
+                    </div>
 
-            <input type="checkbox"
-                checked={openNow}
-                onChange={(e) => setOpenNow(e.target.checked)}
+                    <div className="searchOption">
+                        <p>Price</p>
+                        <select value={price} onChange={(e) => setPrice(e.target.value)}>
+                            <option value="1">$</option>
+                            <option value="2">$$</option>
+                            <option value="3">$$$</option>
+                            <option value="4">$$$$</option>
+                        </select>
+                    </div>
 
-            /> Open Now
+                    <div className="searchOption">
+                        <p>Distance</p>
+                        <select value={radius} onChange={(e) => setRadius(e.target.value)}>
+                            <option value="1000">1 km</option>
+                            <option value="5000">5 km</option>
+                            <option value="10000">10 km</option>
+                            <option value="20000">20 km</option>
+                        </select>
+                    </div>
 
-            <input
-                type="text"
-                placeholder="Enter location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-            />
+                    <div className="searchOption">
+                        <p>Open Now</p>
+                        <select
+                            value={openNow ? "true" : "false"}
+                            onChange={(e) => setOpenNow(e.target.value === "true")}
+                        >
+                            <option value="false">Any</option>
+                            <option value="true">Open Now</option>
+                        </select>
+                    </div>
 
-            <input
-                type="text"
-                placeholder="Restaurant/Food (Optional)"
-                value={term}
-                onChange={(e) => setTerm(e.target.value)}
-            />
-
-            <button onClick={handleFetch}>Search Restaurants</button>
-            <Display 
-                currentRestaurant={currentRestaurant} 
-                dislikeButton={<button onClick={goNext}>Dislike</button>}
-                likeButton={<button onClick={handleLike}>Like</button>} 
-            />
+                    <button onClick={handleFetch}>Search Restaurants</button>
+                </div>
+            </div>
         </div>
     );
 };

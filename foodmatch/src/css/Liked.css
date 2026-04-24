@@ -1,0 +1,76 @@
+.likedPage {
+  min-height: 100vh;
+  background: #fbffa5;
+}
+
+.likedMain {
+  display: flex;
+  min-height: 82vh;
+  gap: 2rem;
+  padding: 1vh 2vw;
+  box-sizing: border-box;
+}
+
+#likedRestaurants {
+  flex: 3;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1vh 1vw;
+  opacity: 0.75; 
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+#likedRestaurants, 
+#results {
+  height: 100%;
+}
+
+.oneRestaurant {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: max(0.9rem, 1vh);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.oneRestaurant:hover {
+  background: #ffd230;
+}
+
+.likedImg {
+  width: max(75px, 4vw);
+  height: max(75px, 4vw);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.likedInfo p {
+  margin: 0.2rem 0;
+  font-size: max(0.9rem, 1.5vh);
+}
+
+.likedInfo b {
+  margin: 0.2rem 0;
+  font-size: max(1.2rem, 2vh);
+}
+
+@media ((max-width: 600px) or (max-aspect-ratio: 4/3)) {
+  .likedMain {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  #likedRestaurants,
+  #results {
+    width: 100%;
+    max-width: 500px;
+    flex: unset;
+  }
+
+  #likedRestaurants {
+    max-height: 40vh;
+  }
+}

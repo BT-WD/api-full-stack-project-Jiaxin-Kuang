@@ -35,7 +35,7 @@
 #loginBox button, 
 #providers button {
   padding: 2vh;
-  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  font-size: max(0.9rem, 1vw);
   border-radius: 10px;
   opacity: 0.75;
   box-sizing: border-box; 
